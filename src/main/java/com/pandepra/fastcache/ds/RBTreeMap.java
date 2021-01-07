@@ -3,15 +3,20 @@ package com.pandepra.fastcache.ds;
 import java.util.Comparator;
 import java.util.Objects;
 
-public class RedBlackTree<K extends Comparable<K>, V> {
+public class RBTreeMap<K extends Comparable<K>, V> {
 
-  private Comparator<K> keyComparator;
+  // the root of the tree
   private Node<K, V> root;
 
-  public RedBlackTree() {}
+  // defines an explicit total order on the keys, overriding their natural ordering.
+  private final Comparator<? super K> keyComparator;
 
-  public RedBlackTree(Comparator<K> keyComparator) {
+  public RBTreeMap(Comparator<? super K> keyComparator) {
     this.keyComparator = keyComparator;
+  }
+
+  public RBTreeMap() {
+    keyComparator = null;
   }
 
   public void put(K key, V value) {
@@ -39,22 +44,32 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     z.setLeft(null);
     z.setRight(null);
     z.setColor(Color.RED);
-    insertFixup(z);
+  }
+
+  public V get(K key) {
+    Node<K, V> x = root;
+    while (null != x && !x.getKey().equals(key)) {
+      if (compareKeys(key, x.getKey()) < 0) {
+        x = x.getLeft();
+      } else {
+        x = x.getRight();
+      }
+    }
+    return null != x ? x.getValue() : null;
   }
 
   private void insertFixup(Node<K, V> z) {
     while (z.getParent().getColor().equals(Color.RED)) {
-      if(z.getParent().equals(z.getParent().getParent().getLeft())) {
+      if (z.getParent().equals(z.getParent().getParent().getLeft())) {
         Node<K, V> y = z.getParent().getParent().getRight();
-        if(y.getColor().equals(Color.RED)) {
+        if (y.getColor().equals(Color.RED)) {
           z.getParent().setColor(Color.BLACK);
           y.setColor(Color.BLACK);
           z.getParent().getParent().setColor(Color.RED);
           z = y.getParent().getParent();
-        } else if(z.equals(z.getParent().getRight())) {
+        } else if (z.equals(z.getParent().getRight())) {
           z = z.getParent();
           leftRotate(z);
-
         }
       } else {
         z = z.getParent();
@@ -69,10 +84,6 @@ public class RedBlackTree<K extends Comparable<K>, V> {
     } else {
       return keyComparator.compare(key1, key2);
     }
-  }
-
-  public V get(K key) {
-    return null;
   }
 
   private void leftRotate(Node<K, V> x) {
