@@ -8,9 +8,7 @@ import java.io.IOException;
 
 @SpringBootApplication
 public class FastCacheApplication {
-  public static void main(String[] args) throws IOException {
-    //    SpringApplication.run(FastCacheApplication.class, args);
-    WALogger<String, String> logger = new WALogger<>();
-    logger.append("hello", "world");
+  public static void main(String[] args) {
+    SpringApplication.run(FastCacheApplication.class, args);
   }
 }

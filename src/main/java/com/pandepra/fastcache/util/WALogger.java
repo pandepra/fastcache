@@ -1,6 +1,7 @@
 package com.pandepra.fastcache.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import javax.annotation.PostConstruct;
 
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
@@ -17,17 +18,6 @@ public class WALogger<K, V> {
   public WALogger() throws IOException {
     fos = new FileOutputStream("/Users/prashantpandey/Desktop/vimscripts/tempfiles/log", true);
     bos = new BufferedOutputStream(fos);
-    Runtime.getRuntime()
-        .addShutdownHook(
-            new Thread(
-                () -> {
-                  try {
-                    fos.close();
-                    bos.close();
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                  }
-                }));
   }
 
   public void append(K key, V val) throws IOException {
