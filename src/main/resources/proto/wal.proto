@@ -1,0 +1,8 @@
+syntax="proto3";
+
+package com.pandepra.proto;
+
+message WalLog {
+  string key = 1;
+  string val = 2;
+}
